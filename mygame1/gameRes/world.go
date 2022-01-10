@@ -38,7 +38,7 @@ type World struct {
 	Img    *ebiten.Image
 }
 
-func NewWorld() World {
+func NewWorld() *World {
 	var w World
 	w.layers = [][]int{
 		{
@@ -117,7 +117,7 @@ func NewWorld() World {
 		},
 	}
 	w.Img = ebiten.NewImage(worldWidth, worldHeight)
-	return w
+	return &w
 }
 
 func (w World) Draw(screen *ebiten.Image) {

@@ -34,6 +34,8 @@ type Runner struct {
 	XState int //前后状态 -1,0,1
 	YState int
 	Img    *ebiten.Image
+	//todo 没有向左走的，临时用一用
+	ImgR   *ebiten.Image
 
 	count int
 }
@@ -45,6 +47,15 @@ func NewRunner() *Runner {
 		log.Fatal(err)
 	}
 	r.Img = ebiten.NewImageFromImage(img)
+
+	imgR := image.NewNRGBA(img.Bounds())
+	for x := 0; x < img.Bounds().Dx(); x++ {
+		for y := 0; y < img.Bounds().Dy(); y++ {
+			imgR.Set(x, y, img.At(img.Bounds().Dx()-x, y))
+		}
+	}
+	r.ImgR = ebiten.NewImageFromImage(imgR)
+
 	return &r
 }
 
@@ -82,9 +93,12 @@ func (r *Runner) Action(screen *ebiten.Image, act, speed, pngRow int) {
 
 	i := (r.count / speed) % act
 	sx, sy := runnerOX+i*runnerWidth, runnerOY*pngRow
-	img := r.Img.SubImage(image.Rect(sx, sy, sx+runnerWidth, sy+runnerHeight)).(*ebiten.Image)
+
+	var img *ebiten.Image
 	if r.XState == -1 {
+		img = r.ImgR.SubImage(image.Rect(sx, sy, sx+runnerWidth, sy+runnerHeight)).(*ebiten.Image)
 	} else {
+		img = r.Img.SubImage(image.Rect(sx, sy, sx+runnerWidth, sy+runnerHeight)).(*ebiten.Image)
 	}
 	screen.DrawImage(img, op)
 }

@@ -11,17 +11,18 @@ const (
 )
 
 type Game struct {
-	camera Camera
-	world  World
-	keys   []ebiten.Key
+	camera *Camera
+	world  *World
 	runner *Runner
+
+	keys []ebiten.Key
 }
 
 func NewGame() *Game {
 	var g Game
-	runner := NewRunner()
-	g.runner = runner
+	g.runner = NewRunner()
 	g.world = NewWorld()
+	g.camera = NewCamera()
 
 	return &g
 }

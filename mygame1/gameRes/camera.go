@@ -14,6 +14,10 @@ type Camera struct {
 	Rotation   int
 }
 
+func NewCamera() *Camera {
+	return &Camera{}
+}
+
 func (c *Camera) String() string {
 	return fmt.Sprintf(
 		"T: %.1f, R: %d, S: %d",
